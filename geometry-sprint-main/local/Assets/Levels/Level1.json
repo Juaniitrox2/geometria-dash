@@ -1,0 +1,24 @@
+{
+    "Difficulty": "Easy",
+    "Stars": 2,
+
+    "Sequence":[
+        [1, {"Object":"Block", "Width": 100, "Height": 1, "TilesY": 1, "Rotation": 3}, 
+        {"Object":"Block", "Width": 100, "Height": 2, "TilesY": -1}],
+        [2,{"Object": "Saw", "TilesY": 2}],
+        [3, {"Object":"Block", "Width": 10, "Height": 1, "TilesY": 2}],
+        [5, {"Object":"Block", "Width": 10, "Height": 1, "TilesY": 3}],
+        [7, {"Object":"Block", "Width": 10, "Height": 1, "TilesY": 4}],
+        [23, {"Object":"Block", "Width": 10, "Height": 1, "TilesY": -3}],
+        [18,{"Object": "JumpOrb", "OrbType": "Green","TilesY":3}],
+        [27,{"Object": "JumpOrb", "OrbType": "Blue","TilesY":-5}],
+        [31.5,{"Object": "Spike", "TilesY": 2}],    
+        [32,{"Object": "Spike", "TilesY": 2}],
+        [32,{"Object": "JumpOrb", "OrbType": "Yellow", "TilesY": 4}],
+        [0.5,{"Object": "JumpPad", "PadType": "Yellow", "TilesY": 1}],
+        [30,{"Object": "JumpPad", "PadType": "Yellow", "TilesY": 2}],
+        [32.5,{"Object": "Spike", "TilesY": 2}],
+        [33,{"Object": "Spike", "TilesY": 2}]
+    ]
+
+}
