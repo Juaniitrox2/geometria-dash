@@ -11,12 +11,13 @@ ScreenResolution = [1000, 600]
 Screen = pygame.display.set_mode(ScreenResolution) 
 pygame.display.set_caption("")
 
-finished = False
+finished = True
 clock = pygame.time.Clock()
 selected_level = "Level1"
 
 def main():
     global finished
+    finished = False
 
     UIManager.LoadMainMenu()
 
