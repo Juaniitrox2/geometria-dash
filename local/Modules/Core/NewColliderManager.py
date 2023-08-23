@@ -96,7 +96,7 @@ class Collider:
             if Collider.IsTrigger and IsColliding:
                 TriggerCounter += 1
 
-        if self.Location[1] + self.Height >= UNDER_LIMIT and numpy.sign(WORLD_GRAVITY) == -1:
+        if self.Location[1] + self.Height >= UNDER_LIMIT and numpy.sign(WORLD_GRAVITY) == -1 and self.Tags.count("Cubemode") > 0:
             self.Overlapping = True
 
 
@@ -133,15 +133,24 @@ class Collider:
                 Height = self.Location[1] + self.Height
                 
                 if IsShip:
-                    if self.Velocity[1] < 0: 
-                        if self.Location[1] < Reach:
-                            self.Velocity[1] = 0
-                            self.Location[1] = Reach 
+                    if GravitySign == 1:
+                        if self.Velocity[1] < 0: 
+                            if self.Location[1] < Reach:
+                                self.Velocity[1] = 0
+                                self.Location[1] = Reach 
+                        else:
+                            if Height > Collider.Location[1]:
+                                self.Velocity[1] = 0
+                                self.Location[1] = Collider.Location[1] - self.Height + 1
                     else:
-                        if Height > Collider.Location[1]:
-                            self.Velocity[1] = 0
-                            self.Location[1] = Collider.Location[1] - self.Height + 1
-
+                        if self.Velocity[1] > 0: 
+                            if Height > Collider.Location[1]:
+                                self.Velocity[1] = 0
+                                self.Location[1] = Collider.Location[1] - self.Height + 1
+                        else:
+                            if self.Location[1] < Reach:
+                                self.Velocity[1] = 0
+                                self.Location[1] = Reach 
                     
                 elif GravitySign == -1:
                     if self.Location[1] < Reach:
@@ -152,8 +161,11 @@ class Collider:
                         ApplyGravity = False
                         self.Location[1] = (Collider.Location[1] - self.Height + 1)
 
-        if self.Location[1] >= UNDER_LIMIT - self.Height and GravitySign == 1:
-            ApplyGravity = False
+        if self.Location[1] >= UNDER_LIMIT - self.Height:
+            ApplyGravity = False if GravitySign == 1 else True
+            if self.Velocity[1] > 0:
+                self.Velocity[1] = 0
+
             self.Location[1] = (UNDER_LIMIT - self.Height) 
             self.Grounded = True
         else:
@@ -165,6 +177,9 @@ class Collider:
             self.Velocity[1] += AppliedGravity
         else:
             self.Velocity[1] -= self.Acceleration[1]/Mass
+
+        if abs(self.Velocity[1] > 18):
+            self.Velocity[1] = numpy.sign(self.Velocity[1]) * 16
 
         """if (self.Velocity[1]) > 10:
             self.Velocity[1] = (self.Velocity[1] + (10 - self.Velocity[1]) * 0.1)

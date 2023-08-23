@@ -24,11 +24,12 @@ def RefreshScreen(Screen):
     NewColliderManager.CURRENT_FRAME += 1
     Collider = PlayerCharacter.Collider
     YPosition = Collider.Location[1] + Collider.Height if NewColliderManager.WORLD_GRAVITY > 0 else Collider.Location[1]
-    if PlayerCharacter.MidAir == False:
-        PlrParticles.Enabled = True
-        PlrParticles.Location = [500, YPosition]
-    else:
-        PlrParticles.Enabled = False
+    if PlayerCharacter.Mode == "Cube":
+        if PlayerCharacter.MidAir == False:
+            PlrParticles.Enabled = True
+            PlrParticles.Location = [500, YPosition]
+        else:
+            PlrParticles.Enabled = False
 
     for Module in CachedModules:
         if hasattr(Module, "CheckRendering"):
@@ -89,7 +90,7 @@ def IsRunning():
     return not NewColliderManager.FROZEN
 
 def Restart():
-    global LevelProgress, PlrParticles, LastOrbFrameInput
+    global LevelProgress, PlrParticles, LastOrbFrameInput, LevelData
     LastOrbFrameInput = 0
     LevelProgress = 0
     NewColliderManager.CURRENT_FRAME = 0
@@ -97,6 +98,7 @@ def Restart():
     ParticleManager.Clear()
     NewColliderManager.Clear()
     if PlayerCharacter != None:
+        PlayerCharacter.SwitchMode(LevelData["StartMode"])
         PlayerCharacter.RestartPlayer()
 
         PlrParticles = ParticleManager.new(ParticleManager.Templates.Square)
@@ -112,7 +114,7 @@ def TriggerInputDetected(evento, type):
         b = evento.type == pygame.MOUSEBUTTONDOWN and evento.button == pygame.BUTTON_LEFT
 
         if a or b:
-            LastOrbFrameInput = NewColliderManager.CURRENT_FRAME + 8
+            LastOrbFrameInput = NewColliderManager.CURRENT_FRAME + 9
 
 def ActivatedTrigger():
     global LastOrbFrameInput
