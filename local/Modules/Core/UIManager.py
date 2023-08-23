@@ -5,7 +5,16 @@ import Modules.Core.NewColliderManager as NewColliderManager
 import Modules.Core.ButtonManager as ButtonManager
 import Modules.Core.EventManager as EventManager
 
+PauseFunction = None
+
+def InputStepped(Keybinds):
+    if Keybinds[pygame.K_ESCAPE] and PauseFunction != None:
+        PauseFunction()
+
 def LoadMainMenu():
+    global PauseFunction
+    PauseFunction = None
+
     NewColliderManager.FROZEN = True
     EventManager.InLevel = False
     EventManager.Restart()
@@ -22,6 +31,8 @@ def LoadMainMenu():
     LevelSelectButton.OnClickFunction = LoadLevelSelectMenu
     
 def LoadLevelSelectMenu():
+    global PauseFunction
+    PauseFunction = None
     ButtonManager.Clear()
 
     Level1SelectButton = ButtonManager.new({
@@ -42,6 +53,7 @@ def LoadLevelSelectMenu():
     Level1SelectButton.OnClickFunction = StartLevel1
 
 def LoadInLevelMenu():
+    global PauseFunction
     ButtonManager.Clear()
 
     PauseButton = ButtonManager.new({
@@ -79,3 +91,5 @@ def LoadInLevelMenu():
     Leave.OnClickFunction = LoadMainMenu
     Retry.OnClickFunction = RetryFunction
     PauseButton.OnClickFunction = Pause
+    PauseFunction = Pause
+

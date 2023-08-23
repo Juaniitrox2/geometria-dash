@@ -31,7 +31,10 @@ def main():
                 finished = True 
             
             if evento.type == pygame.MOUSEBUTTONDOWN or evento.type == pygame.KEYDOWN:
-                EventManager.RenderInputs()
+                EventManager.RenderInputs(pygame.key.get_pressed())
+
+                EventManager.TriggerInputDetected(evento, "down")
+
         # GAME LOGIC
         if EventManager.IsRunning():
             PlayerInput = EventManager.IsInputDetected()
@@ -50,7 +53,7 @@ def main():
                 if PlayerCharacter.Collider.TriggerCollision:
                     PlayerCharacter.MidAir = True
 
-            PlayerCharacter.Action(Input)
+            PlayerCharacter.Action(Input, EventManager.ActivatedTrigger())
             EventManager.RenderLevel()
 
             if PlayerCharacter.Collider.Overlapping:

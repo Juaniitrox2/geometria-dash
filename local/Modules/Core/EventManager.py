@@ -5,7 +5,9 @@ import Modules.Core.NewColliderManager as NewColliderManager
 import Modules.Core.ObjectManager as ObjectManager
 import Modules.Core.ButtonManager as ButtonManager
 import Modules.Core.ParticleManager as ParticleManager
+import Modules.Core.UIManager as UIManager
 
+LastOrbFrameInput = 0
 InLevel = False
 PlayerCharacter = None
 PlrParticles = None
@@ -15,7 +17,7 @@ LevelProgress = 0
 ScreenSize = []
 
 CachedModules = [
-    NewColliderManager, ParticleManager, ObjectManager, ButtonManager
+    NewColliderManager, ParticleManager, ObjectManager, UIManager, ButtonManager,
 ]
 
 def RefreshScreen(Screen):
@@ -78,16 +80,17 @@ def RenderLevel():
                         OrbParticles.Color = Colors.ORBE_ROSA
 
 
-def RenderInputs():
+def RenderInputs(Key):
     for Module in CachedModules:
         if hasattr(Module, "InputStepped"):
-            Module.InputStepped()
+            Module.InputStepped(Key)
 
 def IsRunning():
     return not NewColliderManager.FROZEN
 
 def Restart():
-    global LevelProgress, PlrParticles
+    global LevelProgress, PlrParticles, LastOrbFrameInput
+    LastOrbFrameInput = 0
     LevelProgress = 0
     NewColliderManager.CURRENT_FRAME = 0
 
@@ -102,6 +105,19 @@ def Restart():
 def IsInputDetected():
     return pygame.mouse.get_pressed()[0] or pygame.key.get_pressed()[pygame.K_w] or pygame.key.get_pressed()[pygame.K_UP] or pygame.key.get_pressed()[pygame.K_SPACE]
 
+def TriggerInputDetected(evento, type):
+    global LastOrbFrameInput
+    if type == "down":
+        a = evento.type == pygame.KEYDOWN and (evento.key == pygame.K_w or evento.key == pygame.K_SPACE or evento.key == pygame.K_UP)
+        b = evento.type == pygame.MOUSEBUTTONDOWN and evento.button == pygame.BUTTON_LEFT
+
+        if a or b:
+            LastOrbFrameInput = NewColliderManager.CURRENT_FRAME + 8
+
+def ActivatedTrigger():
+    global LastOrbFrameInput
+    return LastOrbFrameInput >= NewColliderManager.CURRENT_FRAME
+
 def Init(ScreenResolution, Player):
     global LevelData, LevelProgress, PlayerCharacter, PlrParticles, ScreenSize
 
@@ -112,5 +128,9 @@ def Init(ScreenResolution, Player):
     LevelProgress = 0
 
     ScreenSize = ScreenResolution
+
+    for Module in CachedModules:
+        if hasattr(Module, "Init"):
+            Module.Init()
 
     PlrParticles = ParticleManager.new(ParticleManager.Templates.Square)

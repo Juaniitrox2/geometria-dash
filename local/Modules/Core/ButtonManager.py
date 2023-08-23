@@ -7,8 +7,6 @@ canBeRendered = True
 
 class Button(object):
     def __init__(self, Properties):
-        print(Properties)
-
         self.Location = Properties["Location"] if Properties.get("Location") else [0, 0]
         self.Anchor = "Center"
         self.Width = Properties["Width"] if Properties.get("Width") else 0.04
@@ -82,7 +80,7 @@ def FrameStepped(Screen):
     for Button in CachedButtons:
         Button.draw(Screen)
 
-def InputStepped():
+def InputStepped(Keybinds):
     global CachedButtons
 
     for Button in CachedButtons:

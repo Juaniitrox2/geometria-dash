@@ -59,12 +59,14 @@ class Collider:
         return
 
     def GetCollidingObjects(self):
+        SCREEN_RES = EventManager.ScreenSize
+        UNDER_LIMIT = SCREEN_RES[1] - 30
+
         CollidingList = []
         GravY = numpy.sign(WORLD_GRAVITY)
         
         self.Overlapping = False
         TriggerCounter = 0
-
 
         for Collider in WorldColliders:
             if Collider == self:
@@ -93,6 +95,10 @@ class Collider:
 
             if Collider.IsTrigger and IsColliding:
                 TriggerCounter += 1
+
+        if self.Location[1] + self.Height >= UNDER_LIMIT and numpy.sign(WORLD_GRAVITY) == -1:
+            self.Overlapping = True
+
 
         self.TriggerCollision = len(CollidingList) == TriggerCounter if TriggerCounter > 0 else False
 
