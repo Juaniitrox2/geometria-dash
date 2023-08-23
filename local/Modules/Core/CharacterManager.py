@@ -66,8 +66,10 @@ class Character:
         
         for Trigger in TriggerList:
             if Trigger.IsTrigger:
+                if Trigger.Tags[0] == "Collectable":
+                    Trigger.Location[0] = -300
+                    return
                 Trigger.Disabled = True 
-
                 # logic
                 TouchedTrigger = True
                 Color = "Blue" if Trigger.Tags.count("Blue") > 0 else "Yellow" if Trigger.Tags.count("Yellow") > 0 else "Pink" if Trigger.Tags.count("Pink") > 0 else "Green"

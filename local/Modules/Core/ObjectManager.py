@@ -84,6 +84,17 @@ class JumpPad(Sprite):
         Properties["Trigger"] = True
         super().__init__(Properties)
 
+class Coin(Sprite):
+    def __init__(self,Properties):
+        Properties["Width"] =  75
+        Properties["Height"] = 75
+        Properties["Scale"] = 1.3
+        Properties["Trigger"] = True
+        Properties["Tags"] = ["Collectable"]
+        Properties["Tags"].append(Properties["CoinType"]) if Properties.get("CoinType") else "Gold"
+        Properties["Type"] =   Properties["Tags"][-1] + "Coin"
+        super().__init__(Properties)
+
 def Clear():
     global existingSprites
     existingSprites = []
@@ -100,6 +111,8 @@ def new(Properties):
         return Saw(Properties)
     elif Properties.get("Object") == "JumpPad":
         return JumpPad(Properties)
+    elif Properties.get("Object") == "Coin":
+        return Coin(Properties)
     
 def FrameStepped(screen):
     for Sprite in existingSprites:
@@ -109,7 +122,7 @@ def FrameStepped(screen):
             xDeviation,yDeviation = CalculateDeviation(Sprite.Rotation)
             screen.blit(Sprite.FittedTexture, (Sprite.Collider.Location[0] -xDeviation,Sprite.Collider.Location[1] - yDeviation))
 
-        elif Sprite.Type == "Saw":
+        elif Sprite.Type == "Saw" or Sprite.Type.count("Coin") > 0:
             ColliderSize = [Sprite.Collider.Height, Sprite.Collider.Width]
             ScaleDifference = ColliderSize[0]/2
 
@@ -118,14 +131,14 @@ def FrameStepped(screen):
             ColliderRect.center = (Sprite.Collider.Location[0] + ScaleDifference, Sprite.Collider.Location[1] + ScaleDifference)
 
             screen.blit(Texture, ColliderRect)
-            Sprite.Rotation -= 2
+            Sprite.Rotation -= 2 if Sprite.Type == "Saw" else 0
         elif Sprite.Type.count("Pad") > 0:
             screen.blit(Sprite.FittedTexture, (Sprite.Collider.Location[0] ,Sprite.Collider.Location[1] -30 ))
         else:   
             Size = Sprite.FittedTexture.get_size()
             Pos = Sprite.Collider.Location
             Rect = pygame.Rect(Pos, Size)
-            Rect.center = (Pos[0] + Size[0]/2.2, Pos[1] + Size[1]/2.2)
+            Rect.center = (Pos[0] + Size[0]/2.2, Pos[1]+Size[1]/2.2)
             screen.blit(Sprite.FittedTexture, Rect)
 
 
