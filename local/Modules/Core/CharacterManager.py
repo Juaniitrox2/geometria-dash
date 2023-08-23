@@ -68,6 +68,7 @@ class Character:
             if Trigger.IsTrigger:
                 if Trigger.Tags[0] == "Collectable":
                     Trigger.Location[0] = -300
+                    #Codigo de coleccionables
                     return
                 Trigger.Disabled = True 
                 # logic
