@@ -5,6 +5,15 @@ import Modules.Core.ParticleManager as ParticleManager
 import Main
 import numpy
 
+Modes = [
+    "Ship",
+    "Cube",
+    "Wheel",
+    "Spider",
+    "Ufo",
+    "Robot",
+
+]
 DEFAULT_JUMP_HEIGHT = 12
 ActiveCharacter = None
 
@@ -61,20 +70,25 @@ class Character:
         GravitySign = numpy.sign(NewColliderManager.WORLD_GRAVITY)
         TriggerList = self.Collider.CollisionList
         JumpHeight = DEFAULT_JUMP_HEIGHT
-        CanJump = True
         TouchedTrigger = False
 
         for Trigger in TriggerList:
             if Trigger.IsTrigger:
+                Trigger.Disabled = True
+
+                Type = Trigger.Tags[-1]
+                if Type in Modes:
+                    self.SwitchMode(Type)
+                    continue
+
                 if Trigger.Tags[0] == "Collectable":
                     Trigger.Location[0] = -300
                     #Codigo de coleccionables
-                    return
-                Trigger.Disabled = True 
+                    continue
+
                 # logic
                 TouchedTrigger = True
                 Color = "Blue" if Trigger.Tags.count("Blue") > 0 else "Yellow" if Trigger.Tags.count("Yellow") > 0 else "Pink" if Trigger.Tags.count("Pink") > 0 else "Green"
-                Type = Trigger.Tags[-1]
                 JumpHeight = GetJumpBehavior(Color,Type)
                 if Type == "JumpOrb" and not(FrameInput):
                     TouchedTrigger = False
@@ -88,7 +102,7 @@ class Character:
             if TouchedTrigger:                  
                 if Type == "JumpPad":      
                     OrbParticles(Color,Object)               
-                    self.Collider.SetVelocity(0, GravitySign * JumpHeight) 
+                    self.Collider.SetVelocity(0, GravitySign * JumpHeight)
             return          
         
         if TouchedTrigger:
@@ -130,7 +144,7 @@ def GetJumpBehavior(Color,Type):
     elif Color == "Green":
         JumpHeight = -11
     elif Color == "Red":
-        JumpHeight = 18
+        JumpHeight = 22
     return JumpHeight
 
 def OrbParticles(Color,Trigger):

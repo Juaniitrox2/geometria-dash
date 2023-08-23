@@ -24,15 +24,16 @@ class Sprite:
         self.Scale = Properties["Scale"] if Properties.get("Scale") else 1
         self.Texture = LoadedSprites[self.Type]
         self.Rotation = Properties["Rotation"] if Properties.get("Rotation") else 0
-        self.FittedTexture  = self.GetFittedTexture()     
+        self.FittedTexture = self.GetFittedTexture()  
         self.Collider =  NewColliderManager.new(Properties)
         existingSprites.append(self)      
         
     def GetFittedTexture(self):
         x = self.Scale
         TextureToUse = self.Texture
+        Size = TextureToUse.get_size()
 
-        ScaledTexture = pygame.transform.scale(TextureToUse, (50 * x,50 * x))
+        ScaledTexture = pygame.transform.scale(TextureToUse, (Size[0] * x, Size[1] * x))
         ScaledTexture = pygame.transform.rotate(ScaledTexture,90*self.Rotation)
         return ScaledTexture    
         
@@ -45,13 +46,14 @@ def CheckRendering():
 
 class JumpOrb(Sprite):
     def __init__(self, Properties):     
-        Properties["Height"] = 35
-        Properties["Width"] = 35 
-        Properties["Scale"] = 0.8
+        Properties["Height"] = 40
+        Properties["Width"] = 40 
+        Properties["Scale"] = 0.9
         Properties["Tags"] = [Properties["OrbType"]]
         Properties["Type"] = Properties["Tags"][0] + "Orb"
         Properties["Tags"].append("JumpOrb") 
         Properties["Trigger"] = True
+        Properties["Debug"] = True
         super().__init__(Properties)
         
 class Spike(Sprite):
@@ -72,9 +74,10 @@ class Saw(Sprite):
     def __init__(self,Properties):
         Properties["Type"] = "Saw"
         Properties["Tags"] = ["KillObject"]
-        Properties["Width"] = 75
-        Properties["Height"] = 75
-        Properties["Scale"] = 2
+        Properties["Width"] = 70
+        Properties["Height"] = 70
+        Properties["Scale"] = 0.2
+        
         super().__init__(Properties)
 
 class Block(Sprite):
@@ -106,24 +109,23 @@ class Coin(Sprite):
     def __init__(self,Properties):
         Properties["Width"] =  75
         Properties["Height"] = 75
-        Properties["Scale"] = 1.3
+        Properties["Scale"] = 0.75
         Properties["Trigger"] = True
         Properties["Tags"] = ["Collectable"]
         Properties["Tags"].append(Properties["CoinType"]) if Properties.get("CoinType") else "Gold"
         Properties["Type"] =   Properties["Tags"][-1] + "Coin"
         super().__init__(Properties)
 
-class Coin(Sprite):
-    def __init__(self,Properties):
-        Properties["Width"] =  75
-        Properties["Height"] = 75
-        Properties["Scale"] = 1.3
+class Portal(Sprite):
+    def __init__(self, Properties):
+        Properties["Width"] = 40
+        Properties["Height"] = 100
+        Properties["Scale"] = 0.35
+        Properties["Debug"] = False
         Properties["Trigger"] = True
-        Properties["Tags"] = ["Collectable"]
-        Properties["Tags"].append(Properties["CoinType"]) if Properties.get("CoinType") else "Gold"
-        Properties["Type"] =   Properties["Tags"][-1] + "Coin"
+        Properties["Tags"] = [Properties["PortalType"]]
+        Properties["Type"] = Properties["Tags"][0] + "Portal"
         super().__init__(Properties)
-
 
 
 def Clear():
@@ -132,18 +134,23 @@ def Clear():
 
 
 def new(Properties):
-    if Properties.get("Object") == "Block":
-        return Block(Properties)
-    elif Properties.get("Object") == "JumpOrb":
-        return JumpOrb(Properties)
-    elif Properties.get("Object") == "Spike":
-        return Spike(Properties)
-    elif Properties.get("Object") == "Saw":
-        return Saw(Properties)
-    elif Properties.get("Object") == "JumpPad":
-        return JumpPad(Properties)
-    elif Properties.get("Object") == "Coin":
-        return Coin(Properties)
+    match Properties["Object"]:
+        case "Block":
+            return Block(Properties)
+        case "Spike":
+            return Spike(Properties)
+        case "Saw":
+            return Saw(Properties)
+        case "Coin":
+            return Coin(Properties)
+        case "JumpOrb":
+            return JumpOrb(Properties)
+        case "JumpPad":
+            return JumpPad(Properties)
+        case "Portal":
+            return Portal(Properties)
+    
+
     
 def FrameStepped(screen):
     for Sprite in existingSprites:
