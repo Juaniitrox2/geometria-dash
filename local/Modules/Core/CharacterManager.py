@@ -57,13 +57,13 @@ class Character:
 
         screen.blit(NewImage, Rect)
 
-    def Action(self, ActiveInput):
+    def Action(self, ActiveInput, FrameInput):
         GravitySign = numpy.sign(NewColliderManager.WORLD_GRAVITY)
         TriggerList = self.Collider.CollisionList
         JumpHeight = DEFAULT_JUMP_HEIGHT
         CanJump = True
         TouchedTrigger = False
-        
+
         for Trigger in TriggerList:
             if Trigger.IsTrigger:
                 if Trigger.Tags[0] == "Collectable":
@@ -74,11 +74,12 @@ class Character:
                 TouchedTrigger = True
                 Color = "Blue" if Trigger.Tags.count("Blue") > 0 else "Yellow" if Trigger.Tags.count("Yellow") > 0 else "Pink" if Trigger.Tags.count("Pink") > 0 else "Green"
                 Type = Trigger.Tags[-1]
-                JumpHeight = GetJumpBehavior(Color,Type) 
+                JumpHeight = GetJumpBehavior(Color,Type)
+                if Type == "JumpOrb" and not(FrameInput):
+                    TouchedTrigger = False
+
                 Object = Trigger
         self.MassMultiplier = 0.5 if self.Mode == "Ship" else 1
-
-        
         
         if not(ActiveInput):
             if self.Mode == "Ship":
@@ -90,11 +91,13 @@ class Character:
             return          
         
         if TouchedTrigger:
-            OrbParticles(Color,Object)
+            OrbParticles(Color, Object)
             if Color == "Green" or Color == "Blue":
                 NewColliderManager.WORLD_GRAVITY *= -1
 
         if self.Mode == "Cube":
+            if self.Collider.TriggerCollision and not TouchedTrigger:
+                return
             self.Collider.SetVelocity(0, GravitySign * JumpHeight) 
         
         if self.Mode == "Ship":

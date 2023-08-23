@@ -10,16 +10,37 @@
         [3, {"Object":"Block", "Width": 10, "Height": 1, "TilesY": 2}],
         [5, {"Object":"Block", "Width": 10, "Height": 1, "TilesY": 3}],
         [7, {"Object":"Block", "Width": 10, "Height": 1, "TilesY": 4}],
-        [23, {"Object":"Block", "Width": 10, "Height": 1, "TilesY": -3}],
+        [21.5, {"Object":"Block", "Width": 1, "Height": 3, "TilesY": 4}],
+        [30, {"Object":"Block", "Width": 1, "Height": 3, "TilesY": -3}],
+
+        [38, {"Object":"Block", "Width": 50, "Height": 1, "TilesY": -3.5}],
+
+
+        [2,{"Object": "Saw", "TilesY": 2}],
+
         [18,{"Object": "JumpOrb", "OrbType": "Green","TilesY":3}],
-        [27,{"Object": "JumpOrb", "OrbType": "Blue","TilesY":-5}],
-        [31.5,{"Object": "Spike", "TilesY": 2}],    
-        [32,{"Object": "Spike", "TilesY": 2}],
-        [32,{"Object": "JumpOrb", "OrbType": "Yellow", "TilesY": 4}],
-        [0.5,{"Object": "JumpPad", "PadType": "Yellow", "TilesY": 1}],
-        [30,{"Object": "JumpPad", "PadType": "Yellow", "TilesY": 2}],
-        [32.5,{"Object": "Spike", "TilesY": 2}],
-        [33,{"Object": "Spike", "TilesY": 2}]
+        [27,{"Object": "JumpOrb", "OrbType": "Blue","TilesY":-4.5}],
+        [35.3,{"Object": "JumpOrb", "OrbType": "Pink", "TilesY": 4}],
+        [37.7,{"Object": "JumpOrb", "OrbType": "Green", "TilesY": 4.5}],
+
+        [0.5,{"Object": "JumpPad", "PadType": "Yellow", "TilesY": 1, "Rotation":1}],
+        [32.5,{"Object": "JumpPad", "PadType": "Yellow", "TilesY": 2}],
+
+        [21, {"Object": "Spike", "TilesY": 4, "Rotation":1}, {"Object": "Spike", "TilesY": 3, "Rotation":1}, {"Object": "Spike", "TilesY": 2, "Rotation":1}],   
+
+        [29.5, {"Object": "Spike", "TilesY": -3, "Rotation":1}, {"Object": "Spike", "TilesY": -4, "Rotation":1}, {"Object": "Spike", "TilesY": -5, "Rotation":1}],    
+
+        [34.5,{"Object": "Spike", "TilesY": 2}],    
+        [35,{"Object": "Spike", "TilesY": 2}],
+        [35.5,{"Object": "Spike", "TilesY": 2}],
+        [36,{"Object": "Spike", "TilesY": 2}],
+        [36.5,{"Object": "Spike", "TilesY": 2}],
+        [37,{"Object": "Spike", "TilesY": 2}],
+        [37.5,{"Object": "Spike", "TilesY": 2}],
+        [38,{"Object": "Spike", "TilesY": 2}],
+        [44,{"Object": "Spike", "TilesY": -4.5, "Rotation":2}],
+        [44.5,{"Object": "Spike", "TilesY": -4.5, "Rotation":2}],
+        [45,{"Object": "Spike", "TilesY": -4.5, "Rotation":2}]
     ]
 
 }
