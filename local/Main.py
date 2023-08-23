@@ -7,6 +7,7 @@ import Modules.Core.UIManager as UIManager
 
 pygame.init()
 
+ndea = True
 ScreenResolution = [1000, 600]
 Screen = pygame.display.set_mode(ScreenResolution) 
 pygame.display.set_caption("")
@@ -35,7 +36,7 @@ def main():
 
                 EventManager.TriggerInputDetected(evento, "down")
 
-        # GAME LOGIC
+        # GAME LOGIC 
         if EventManager.IsRunning():
             PlayerInput = EventManager.IsInputDetected()
 
