@@ -22,7 +22,7 @@ class Character:
         self.Mode = "Cube"
         self.MidAir = False
 
-        self.CharacterIcon = pygame.image.load("local\Assets\Sprites\CharacterSprite.png") 
+        self.CharacterIcon = pygame.image.load("local\Assets\Sprites\Cube.png") 
 
         self.BallDebounce = 0
         self.DegreeRotation = 0
@@ -81,7 +81,8 @@ class Character:
                 
                 Type = Trigger.Tags[-1]
                 if Type in Modes:
-                    self.SwitchMode(Type)
+                    self.SwitchMode(Type)  
+                    self.CharacterIcon =  pygame.transform.scale(pygame.image.load(f"local\Assets\Sprites\{Type}.png"),(50,50))           
                     continue
 
                 if Trigger.Tags[0] == "Collectable":
