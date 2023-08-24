@@ -120,6 +120,9 @@ def ActivatedTrigger():
     global LastOrbFrameInput
     return LastOrbFrameInput >= NewColliderManager.CURRENT_FRAME
 
+def attime():
+    print(LastOrbFrameInput, NewColliderManager.CURRENT_FRAME)
+
 def Init(ScreenResolution, Player):
     global LevelData, LevelProgress, PlayerCharacter, PlrParticles, ScreenSize
 

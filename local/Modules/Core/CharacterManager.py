@@ -2,6 +2,7 @@ import pygame
 import Modules.Core.NewColliderManager as NewColliderManager
 import Modules.Data.templatecolores as Colors
 import Modules.Core.ParticleManager as ParticleManager
+import Modules.Core.EventManager as EventManager
 import Main
 import numpy
 
@@ -71,11 +72,13 @@ class Character:
         TriggerList = self.Collider.CollisionList
         JumpHeight = DEFAULT_JUMP_HEIGHT
         TouchedTrigger = False
+        Object = None
 
         for Trigger in TriggerList:
             if Trigger.IsTrigger:
-                Trigger.Disabled = True
-
+                if Trigger.Tags.count("ignoreobject") > 0:
+                    continue
+                
                 Type = Trigger.Tags[-1]
                 if Type in Modes:
                     self.SwitchMode(Type)
@@ -94,6 +97,8 @@ class Character:
                     TouchedTrigger = False
 
                 Object = Trigger
+                if TouchedTrigger:
+                    Trigger.Disabled = True
         self.MassMultiplier = 0.5 if self.Mode == "Ship" else 1
         
         if not(ActiveInput):
@@ -113,6 +118,7 @@ class Character:
         if self.Mode == "Cube":
             if self.Collider.TriggerCollision and not TouchedTrigger:
                 return
+            
             self.Collider.SetVelocity(0, GravitySign * JumpHeight) 
         
         if self.Mode == "Ship":

@@ -54,7 +54,8 @@ def main():
                 if PlayerCharacter.Collider.TriggerCollision:
                     PlayerCharacter.MidAir = True
 
-            PlayerCharacter.Action(Input, EventManager.ActivatedTrigger())
+            FrameInputDetected = EventManager.ActivatedTrigger()
+            PlayerCharacter.Action(Input, FrameInputDetected)
             EventManager.RenderLevel()
 
             if PlayerCharacter.Collider.Overlapping:

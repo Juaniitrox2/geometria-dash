@@ -72,6 +72,9 @@ class Collider:
             if Collider == self:
                 continue
 
+            if Collider.Tags.count("ignoreobject") > 0:
+                continue
+
             IsColliding = self.Rect.colliderect(Collider.Rect) 
             self.Rect = pygame.Rect(self.Location[0], self.Location[1] + self.Velocity[1], self.Width, self.Height)
             IsColliding = self.Rect.colliderect(Collider.Rect) and IsColliding
