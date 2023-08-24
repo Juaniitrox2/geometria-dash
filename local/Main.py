@@ -1,4 +1,5 @@
 import pygame
+import json
 import Modules.Data.templatecolores as Colors
 import Modules.Core.NewColliderManager as NewColliderManager
 import Modules.Core.CharacterManager as CharacterManager
@@ -22,7 +23,10 @@ def main():
 
     UIManager.LoadMainMenu()
 
-    PlayerCharacter = CharacterManager.new({"Mode":"Cube"})
+    LevelObject = open("local/Assets/Levels/" + EventManager.SelectedLevel + ".json")
+    LevelData = json.load(LevelObject)
+
+    PlayerCharacter = CharacterManager.new({"Mode":LevelData["StartMode"]})
     EventManager.Init(ScreenResolution, PlayerCharacter)
 
     while not finished:
@@ -47,7 +51,7 @@ def main():
                 if PlayerCharacter.Mode == "Ship" and PlayerInput:
                     Input = True
             else:
-                if (PlayerCharacter.Mode == "Ship" or PlayerCharacter.Mode == "Cube") and PlayerInput:
+                if PlayerInput:
                     Input = True
 
                 PlayerCharacter.MidAir = False

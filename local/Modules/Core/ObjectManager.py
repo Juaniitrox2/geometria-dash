@@ -26,13 +26,15 @@ class Sprite:
         self.Rotation = Properties["Rotation"] if Properties.get("Rotation") else 0
         self.FittedTexture = self.GetFittedTexture()  
         self.Collider =  NewColliderManager.new(Properties)
+        self.AnimationProgress = 0
+        self.Transparency = 0
         existingSprites.append(self)      
         
     def GetFittedTexture(self):
         x = self.Scale
         TextureToUse = self.Texture
         Size = TextureToUse.get_size()
-
+    
         ScaledTexture = pygame.transform.scale(TextureToUse, (Size[0] * x, Size[1] * x))
         ScaledTexture = pygame.transform.rotate(ScaledTexture,90*self.Rotation)
         return ScaledTexture    
@@ -53,7 +55,6 @@ class JumpOrb(Sprite):
         Properties["Type"] = Properties["Tags"][0] + "Orb"
         Properties["Tags"].append("JumpOrb") 
         Properties["Trigger"] = True
-        Properties["Debug"] = True
         super().__init__(Properties)
         
 class Spike(Sprite):
@@ -161,12 +162,20 @@ def FrameStepped(screen):
             screen.blit(Sprite.FittedTexture, (Sprite.Collider.Location[0] -xDeviation,Sprite.Collider.Location[1] - yDeviation))
 
         elif Sprite.Type == "Saw" or Sprite.Type.count("Coin") > 0:
+            Y = Sprite.Collider.Location[1]
+            if Sprite.Collider.Disabled == True:
+                Sprite.AnimationProgress += 1/30
+                if Sprite.AnimationProgress > 1:
+                    Sprite.AnimationProgress = 1
+
+                Y = Y + (100 * Sprite.AnimationProgress)
+
             ColliderSize = [Sprite.Collider.Height, Sprite.Collider.Width]
             ScaleDifference = ColliderSize[0]/2
 
             Texture = pygame.transform.rotate(Sprite.FittedTexture, Sprite.Rotation)
             ColliderRect = Texture.get_rect()
-            ColliderRect.center = (Sprite.Collider.Location[0] + ScaleDifference, Sprite.Collider.Location[1] + ScaleDifference)
+            ColliderRect.center = (Sprite.Collider.Location[0] + ScaleDifference, Y + ScaleDifference)
 
             screen.blit(Texture, ColliderRect)
             Sprite.Rotation -= 2 if Sprite.Type == "Saw" else 0
@@ -174,12 +183,11 @@ def FrameStepped(screen):
             Y = Sprite.Collider.Location[1] - (30 if Sprite.Rotation == 0 else 0)
             X = Sprite.Collider.Location[0] - (30 if Sprite.Rotation == 1 else 0)
             screen.blit(Sprite.FittedTexture, (X, Y))
-        else: 
+        else:
             Size = Sprite.FittedTexture.get_size()
             Pos = Sprite.Collider.Location
             Rect = pygame.Rect(Pos, Size)
             Rect.center = (Pos[0] + Size[0]/2.2 , Pos[1] + Size[1]/2.2)
-
             Rect.center = (Pos[0] + Size[0]/2.2, Pos[1]+Size[1]/2.2)
             screen.blit(Sprite.FittedTexture, Rect)
 

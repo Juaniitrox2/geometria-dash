@@ -9,13 +9,12 @@ import numpy
 Modes = [
     "Ship",
     "Cube",
-    "Wheel",
+    "Ball",
     "Spider",
     "Ufo",
     "Robot",
-
 ]
-DEFAULT_JUMP_HEIGHT = 12
+DEFAULT_JUMP_HEIGHT = 13.5
 ActiveCharacter = None
 
 class Character:
@@ -25,6 +24,7 @@ class Character:
 
         self.CharacterIcon = pygame.image.load("local\Assets\Sprites\CharacterSprite.png") 
 
+        self.BallDebounce = 0
         self.DegreeRotation = 0
         self.RestartPlayer()
         self.SwitchMode(StartOptions["Mode"] if StartOptions.get("Mode") else "Cube")
@@ -85,8 +85,8 @@ class Character:
                     continue
 
                 if Trigger.Tags[0] == "Collectable":
-                    Trigger.Location[0] = -300
                     #Codigo de coleccionables
+                    Trigger.Disabled = True
                     continue
 
                 # logic
@@ -104,28 +104,36 @@ class Character:
         if not(ActiveInput):
             if self.Mode == "Ship":
                 self.Collider.SetAcceleration(0, 0)
-            if TouchedTrigger:                  
-                if Type == "JumpPad":      
-                    OrbParticles(Color,Object)               
-                    self.Collider.SetVelocity(0, GravitySign * JumpHeight)
-            return          
-        
+            if TouchedTrigger and Type == "JumpPad":      
+                OrbParticles(Color,Object)             
+                self.Collider.SetVelocity(0, GravitySign * JumpHeight)
+            return     
+                 
+        self.BallDebounce -= 1
+
         if TouchedTrigger:
             OrbParticles(Color, Object)
             if Color == "Green" or Color == "Blue":
                 NewColliderManager.WORLD_GRAVITY *= -1
 
-        if self.Mode == "Cube":
-            if self.Collider.TriggerCollision and not TouchedTrigger:
-                return
-            
+        OrbJump = False
+        if self.Collider.TriggerCollision and TouchedTrigger:
+            OrbJump = True
             self.Collider.SetVelocity(0, GravitySign * JumpHeight) 
+
+        if not OrbJump and self.Mode == "Cube":
+            self.Collider.SetVelocity(0, GravitySign * JumpHeight)
+            
         
         if self.Mode == "Ship":
             self.Collider.SetAcceleration(0, NewColliderManager.WORLD_GRAVITY)
             if (self.Collider.Velocity[1] > 0 and GravitySign == 1) or (self.Collider.Velocity[1] < 0 and GravitySign == -1):
                 self.Collider.Velocity[1] = 0
-            
+        
+        if self.Mode == "Ball" and self.BallDebounce <= 0:
+            self.BallDebounce = 5
+            self.Collider.SetVelocity(0, -GravitySign * 18)
+            NewColliderManager.WORLD_GRAVITY *= -1
 
     def SwitchMode(self, NewMode):
         Tags = self.Collider.Tags

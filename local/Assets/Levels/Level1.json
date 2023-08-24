@@ -7,18 +7,14 @@
         [1, {"Object":"Block", "Width": 500, "Height": 1, "TilesY": 1, "Rotation": 3}, 
         {"Object":"Block", "Width": 500, "Height": 1, "TilesY": -1}],
         [35, {"Object":"Coin", "CoinType": "Gold", "TilesY": -2.5}],
-        [2,{"Object": "Saw", "TilesY": 2}],
-        [3, {"Object":"Block", "Width": 10, "Height": 1, "TilesY": 2}],
-        [5, {"Object":"Block", "Width": 10, "Height": 1, "TilesY": 3}],
-        [7, {"Object":"Block", "Width": 10, "Height": 1, "TilesY": 4}],
+        [3, {"Object":"Block", "Width": 10, "Height": 1, "TilesY": 3}],
+        [10, {"Object":"Block", "Width": 4, "Height": 1, "TilesY": 4}],
         [21.5, {"Object":"Block", "Width": 1, "Height": 3, "TilesY": 4}],
 
         [30, {"Object":"Spike", "Rotation":2, "TilesY": -2}],
         
         [38, {"Object":"Block", "Width": 50, "Height": 1, "TilesY": -2.5}],
-
-
-        [2,{"Object": "Saw", "TilesY": 2}],
+        [45, {"Object":"Block", "Width": 36, "Height": 1, "TilesY": 4}],
 
         [18,{"Object": "JumpOrb", "OrbType": "Green","TilesY":3}],
         [27,{"Object": "JumpOrb", "OrbType": "Blue","TilesY":-3}],
@@ -28,11 +24,34 @@
         [0.5,{"Object": "JumpPad", "PadType": "Yellow", "TilesY": 1}],
         [32.5,{"Object": "JumpPad", "PadType": "Yellow", "TilesY": 2}],
 
-        [60, {"Object":"Portal", "PortalType": "Ship", "TilesY": -3}],
+        [48, {"Object":"Portal", "PortalType": "Ball", "TilesY": -3.5}],
 
         [21, {"Object": "Spike", "TilesY": 4, "Rotation":1}, {"Object": "Spike", "TilesY": 3, "Rotation":1}, {"Object": "Spike", "TilesY": 2, "Rotation":1}], 
 
-        
+        [1.5,{"Object": "Spike", "TilesY": 2}],    
+        [2,{"Object": "Spike", "TilesY": 2}],    
+        [2.5,{"Object": "Spike", "TilesY": 2}],    
+        [3,{"Object": "Spike", "TilesY": 2}],    
+        [3.5,{"Object": "Spike", "TilesY": 2}],    
+        [4,{"Object": "Spike", "TilesY": 2}],    
+        [4.5,{"Object": "Spike", "TilesY": 2}],    
+        [5,{"Object": "Spike", "TilesY": 2}],    
+        [5.5,{"Object": "Spike", "TilesY": 2}],    
+        [6,{"Object": "Spike", "TilesY": 2}],
+        [6.5,{"Object": "Spike", "TilesY": 2}],
+        [7,{"Object": "Spike", "TilesY": 2}],
+        [7.5,{"Object": "Spike", "TilesY": 2}],
+        [8,{"Object": "Spike", "TilesY": 2}],
+        [8.5,{"Object": "Spike", "TilesY": 2}],
+        [9,{"Object": "Spike", "TilesY": 2}],
+        [9.5,{"Object": "Spike", "TilesY": 2}],    
+        [10,{"Object": "Spike", "TilesY": 2}],
+        [10.5,{"Object": "Spike", "TilesY": 2}],
+        [11,{"Object": "Spike", "TilesY": 2}],
+        [11.5,{"Object": "Spike", "TilesY": 2}],
+
+
+
         [34.5,{"Object": "Spike", "TilesY": 2}],    
         [35,{"Object": "Spike", "TilesY": 2}],
         [35.5,{"Object": "Spike", "TilesY": 2}],
@@ -43,7 +62,8 @@
         [38,{"Object": "Spike", "TilesY": 2}],
         [44,{"Object": "Spike", "TilesY": -3.5, "Rotation":2}],
         [44.5,{"Object": "Spike", "TilesY": -3.5, "Rotation":2}],
-        [45,{"Object": "Spike", "TilesY": -3.5, "Rotation":2}]
+        [45,{"Object": "Spike", "TilesY": -3.5, "Rotation":2}],
+        [50,{"Object": "Spike", "TilesY": -3.5, "Rotation":2}]
     ]
 
 }

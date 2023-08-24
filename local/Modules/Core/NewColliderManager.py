@@ -48,7 +48,7 @@ class Collider:
         self.Rect = pygame.Rect(self.Location[0], self.Location[1], self.Width, self.Height)
         self.CollisionList = self.GetCollidingObjects()
 
-        if self.Location[1] <= -100:
+        if self.Location[1] <= -110:
             self.Overlapping = True
 
         if len(self.CollisionList) > 0 or self.Grounded:
@@ -67,6 +67,7 @@ class Collider:
         
         self.Overlapping = False
         TriggerCounter = 0
+        isPlayer = self.Tags.count("Player") > 0
 
         for Collider in WorldColliders:
             if Collider == self:
@@ -81,8 +82,9 @@ class Collider:
             OverlapY = self.Location[1] > Collider.Location[1] and self.Location[1] < Collider.Location[1] + Collider.Height
             OverlapX = self.Location[0]< Collider.Location[0]
             OverlapY = (OverlapY and GravY == 1)
+            isBall = self.Tags.count("Ballmode") > 0
             isShip = self.Tags.count("Shipmode") > 0
-            if isShip:
+            if isShip or isBall:
                 OverlapY = False
 
             Overlapping = OverlapX or OverlapY
@@ -125,9 +127,10 @@ class Collider:
             self.Velocity[0] = -10
             return
 
-        IsShip = self.Tags.count("Shipmode") > 0
+        IsShip = self.Tags.count("Shipmode") > 0 or self.Tags.count("Ballmode") > 0
 
         if self.IsColliding:
+
             for Collider in self.CollisionList:
                 if Collider.IsTrigger:
                     continue
@@ -138,12 +141,12 @@ class Collider:
                 if IsShip:
                     if GravitySign == 1:
                         if self.Velocity[1] < 0: 
-                            if self.Location[1] < Reach:
+                            if self.Location[1] <= Reach and self.Location[1] > Collider.Location[1]:
                                 self.Velocity[1] = 0
-                                self.Location[1] = Reach 
+                                self.Location[1] = Reach
                         else:
                             if Height > Collider.Location[1]:
-                                self.Velocity[1] = 0
+                                self.Velocity[1] = 0 if self.Velocity[1] > 0 else self.Velocity[1]
                                 self.Location[1] = Collider.Location[1] - self.Height + 1
                     else:
                         if self.Velocity[1] > 0: 
@@ -167,13 +170,13 @@ class Collider:
         if self.Location[1] >= UNDER_LIMIT - self.Height:
             ApplyGravity = False if GravitySign == 1 else True
             if self.Velocity[1] > 0:
+                print("Zeeero")
                 self.Velocity[1] = 0
 
             self.Location[1] = (UNDER_LIMIT - self.Height) 
             self.Grounded = True
         else:
             self.Grounded = False
-
         
         Do = (self.Acceleration[1] <= 0) if GravitySign == 1 else (self.Acceleration[1] >= 0)
         if ApplyGravity and Do:
@@ -181,17 +184,14 @@ class Collider:
         else:
             self.Velocity[1] -= self.Acceleration[1]/Mass
 
-        if abs(self.Velocity[1] > 18):
-            self.Velocity[1] = numpy.sign(self.Velocity[1]) * 16
-
-        """if (self.Velocity[1]) > 10:
-            self.Velocity[1] = (self.Velocity[1] + (10 - self.Velocity[1]) * 0.1)
-        elif (self.Velocity[1]) < -10:
-            self.Velocity[1] = (self.Velocity[1] + (-10 - self.Velocity[1]) * 0.1)"""
+        if abs(self.Velocity[1] >= 18):
+            self.Velocity[1] = numpy.sign(self.Velocity[1]) * 18
 
     def SetVelocity(self, x, y):
         self.Velocity[0] = x
         self.Velocity[1] = -y
+
+        print("UPDATED VELOCITY:", self.Velocity)
 
     def SetAcceleration(self, x, y):
         self.Acceleration = [x, y]
