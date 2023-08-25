@@ -114,7 +114,7 @@ class Collider:
         UNDER_LIMIT = SCREEN_RES[1] - 30
 
         Mass = (self.Mass/6.5) * self.MassMultiplier
-        AppliedGravity = WORLD_GRAVITY/Mass
+        AppliedGravity = self.GetAppliedGravity()
         ApplyGravity = True
         GravitySign = numpy.sign(WORLD_GRAVITY)
 
@@ -214,6 +214,11 @@ class Collider:
             break
         
         return trigg
+    
+    def GetAppliedGravity(self):
+        Mass = (self.Mass/6.5) * self.MassMultiplier
+        AppliedGravity = WORLD_GRAVITY/Mass
+        return AppliedGravity
 
 def new(Properties):
     return Collider(Properties)

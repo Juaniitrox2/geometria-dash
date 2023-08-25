@@ -14,20 +14,28 @@ Modes = [
     "Ufo",
     "Robot",
 ]
+ModeSizes = {
+    "Ship":[75,75],
+    "Cube":[50, 50],
+    "Ball":[60,60]
+}
+
 DEFAULT_JUMP_HEIGHT = 13.5
 ActiveCharacter = None
+
+def Lerp(a, b, c):
+    return (1 - c) * a + c * b
 
 class Character:
     def __init__(self, StartOptions):
         self.Mode = "Cube"
         self.MidAir = False
 
-        self.CharacterIcon = pygame.image.load("local\Assets\Sprites\Cube.png") 
-
         self.BallDebounce = 0
         self.DegreeRotation = 0
         self.RestartPlayer()
         self.SwitchMode(StartOptions["Mode"] if StartOptions.get("Mode") else "Cube")
+        self.CharacterIcon = pygame.image.load("local\Assets\Sprites/" + self.Mode + ".png") 
 
     def RestartPlayer(self):
         self.Collider = NewColliderManager.new({"Height": 50, "Width":50, "Location":(Main.ScreenResolution[0]/2, Main.ScreenResolution[1] - 30), "Tags":["Player"]})
@@ -39,6 +47,7 @@ class Character:
         GravitySign = numpy.sign(NewColliderManager.WORLD_GRAVITY)
 
         # LOGIC
+        RotSpeed = 8 if self.Mode == "Cube" else 12
         if self.Mode != "Cube":
             self.Collider.TerminalVelocity = True
         else:
@@ -47,19 +56,30 @@ class Character:
         # VISUALS FOR ROTATING THE CUBE
         CharacterRotation = self.DegreeRotation
         if self.MidAir == True :
-            self.DegreeRotation -= GravitySign * 8
+            self.DegreeRotation -= GravitySign * RotSpeed
         elif not NewColliderManager.FROZEN:
-            Rotations = [0, -90, -180, -270]
-            Closest = 0
+            if self.Mode == "Cube":
+                Rotations = [0, -90, -180, -270]
+                Closest = 0
 
-            for i in Rotations:
-                if abs(CharacterRotation) > abs(i):
-                    Closest = i
+                for i in Rotations:
+                    if abs(CharacterRotation) > abs(i):
+                        Closest = i
 
-            CharacterRotation = Closest * -GravitySign
+                CharacterRotation = Closest * -GravitySign
+            elif self.Mode == "Ball":
+                self.DegreeRotation -= GravitySign * RotSpeed
 
-        if self.DegreeRotation < -360 or self.Mode != "Cube" or (self.DegreeRotation < 0 and GravitySign == -1) or (self.DegreeRotation > 0 and GravitySign == 1) or self.DegreeRotation > 360:
-            self.DegreeRotation = 0
+        if self.Mode == "Ship":
+            Velocity = self.Collider.Velocity
+            NewRotation = -Velocity[1] * 2 + 5
+
+            self.DegreeRotation = Lerp(self.DegreeRotation, NewRotation, 0.6)
+
+            CharacterRotation = self.DegreeRotation
+        else:
+            if self.DegreeRotation < -360 or (self.DegreeRotation < 0 and GravitySign == -1) or (self.DegreeRotation > 0 and GravitySign == 1) or self.DegreeRotation > 360:
+                self.DegreeRotation = 0
         
         NewImage = pygame.transform.rotate(self.CharacterIcon, CharacterRotation)
         Rect = NewImage.get_rect()
@@ -81,8 +101,7 @@ class Character:
                 
                 Type = Trigger.Tags[-1]
                 if Type in Modes:
-                    self.SwitchMode(Type)  
-                    self.CharacterIcon =  pygame.transform.scale(pygame.image.load(f"local\Assets\Sprites\{Type}.png"),(50,50))           
+                    self.SwitchMode(Type)           
                     continue
 
                 if Trigger.Tags[0] == "Collectable":
@@ -146,6 +165,8 @@ class Character:
         if not(Tags.count(NewMode + "mode") > 0):
             Tags.append(NewMode + "mode")
 
+        self.CharacterIcon = pygame.image.load("local\Assets\Sprites/" + NewMode + ".png") 
+        self.CharacterIcon = pygame.transform.scale(self.CharacterIcon, ModeSizes[NewMode])
         self.Mode = NewMode
         self.Collider.Tags = Tags
 
