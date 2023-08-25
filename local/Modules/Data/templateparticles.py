@@ -13,6 +13,23 @@ Square = {
     "TransparencyGoal":1,
     "Color":(199, 199, 199),
     "EmitType":"Spray",
+    "TemplateType":"Square"
+}
+
+Rocket = {
+    "EmitRate": 450, 
+    "Height": 25, 
+    "Width": 25, 
+    "MaxTime": 0.5, 
+    "MinTime": 0.25, 
+    "Rotation":180, 
+    "SpreadAngle": 15, 
+    "Speed":10,
+    "SizeMultiplier":[0.5, 0],
+    "TransparencyGoal":1,
+    "Color":(255, 150, 70),
+    "EmitType":"Spray",
+    "TemplateType":"Square"
 }
 
 Ring = {
@@ -23,4 +40,5 @@ Ring = {
     "MaxTime":0.5,
     "MinTime":0.35,
     "Radius":35,
+    "TemplateType":"Ring"
 }

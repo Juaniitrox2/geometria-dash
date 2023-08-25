@@ -72,7 +72,7 @@ class Character:
 
         if self.Mode == "Ship":
             Velocity = self.Collider.Velocity
-            NewRotation = -Velocity[1] * 2 + 5
+            NewRotation = -Velocity[1] * 1.5 + 5
 
             self.DegreeRotation = Lerp(self.DegreeRotation, NewRotation, 0.6)
 

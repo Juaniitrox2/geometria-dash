@@ -21,15 +21,32 @@ CachedModules = [
 ]
 
 def RefreshScreen(Screen):
+    global PlrParticles
+
     NewColliderManager.CURRENT_FRAME += 1
     Collider = PlayerCharacter.Collider
     YPosition = Collider.Location[1] + Collider.Height if NewColliderManager.WORLD_GRAVITY > 0 else Collider.Location[1]
     if PlayerCharacter.Mode == "Cube":
+        if PlrParticles == None or PlrParticles.Tag != "Cube":
+            PlrParticles = ParticleManager.new(ParticleManager.Templates.Square)
+            PlrParticles.Tag = "Cube"
+
         if PlayerCharacter.MidAir == False:
             PlrParticles.Enabled = True
             PlrParticles.Location = [500, YPosition]
         else:
             PlrParticles.Enabled = False
+    elif PlayerCharacter.Mode == "Ship":
+        if PlrParticles == None or PlrParticles.Tag != "Ship":
+            PlrParticles = ParticleManager.new(ParticleManager.Templates.Rocket)
+            PlrParticles.Tag = "Ship"
+
+        PlrParticles.Location = [Collider.Location[0], Collider.Location[1] + Collider.Height/1.85]
+    else:
+        if PlrParticles != None:
+            PlrParticles.Enabled = False
+
+        #if PlrParticles 
 
     for Module in CachedModules:
         if hasattr(Module, "CheckRendering"):
@@ -137,5 +154,3 @@ def Init(ScreenResolution, Player):
     for Module in CachedModules:
         if hasattr(Module, "Init"):
             Module.Init()
-
-    PlrParticles = ParticleManager.new(ParticleManager.Templates.Square)

@@ -23,6 +23,7 @@ class Emitter(object):
         self.ParticleObjects = []
         self.LastTime = 0
         self.CanRender = True
+        self.Tag = ""
 
         WorldEmitters.append(self)
         

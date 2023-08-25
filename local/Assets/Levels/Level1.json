@@ -24,8 +24,8 @@
         [0.5,{"Object": "JumpPad", "PadType": "Yellow", "TilesY": 1}],
         [32.5,{"Object": "JumpPad", "PadType": "Yellow", "TilesY": 2}],
 
-        [48, {"Object":"Portal", "PortalType": "Ball", "TilesY": -3.5}],
-        [3, {"Object":"Portal", "PortalType": "Ship", "TilesY": 5}],
+        [48, {"Object":"Portal", "PortalType": "Ball", "TilesY": -4}],
+        [55, {"Object":"Portal", "PortalType": "Ship", "TilesY": -4.5}],
         [21, {"Object": "Spike", "TilesY": 4, "Rotation":1}, {"Object": "Spike", "TilesY": 3, "Rotation":1}, {"Object": "Spike", "TilesY": 2, "Rotation":1}], 
 
         [1.5,{"Object": "Spike", "TilesY": 2}],    
